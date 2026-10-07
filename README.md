@@ -1,0 +1,81 @@
+# LinkFoundry Engineering Assessment
+
+LinkFoundry is a reviewable URL-shortener prototype built with a React/TypeScript client and a .NET 8 API. It demonstrates an engineer-led workflow from requirements through decomposition, implementation, testing, and documented risk decisions. AI is used as an implementation and review assistant; it does not select tasks, approve changes, or deploy software.
+
+## Run locally
+
+Prerequisites: .NET 8 SDK and Node.js 20.19+ (or 22.12+) with npm. The supported Node version is pinned in `.nvmrc`. CI runs ESLint 10 and Vite 7 using Node 22.14.
+
+From PowerShell:
+
+```powershell
+cd "$env:USERPROFILE\Downloads\LinkFoundry"
+dotnet test LinkFoundry.sln
+```
+
+Start the API in one terminal:
+
+```powershell
+dotnet run --project src/Shortener.Api --launch-profile http
+```
+
+Start the React application in another terminal:
+
+```powershell
+cd web
+npm ci
+npm run dev
+```
+
+Open <http://localhost:5173>. The API listens on <http://localhost:5080>; interactive Swagger is at <http://localhost:5080/swagger>. `/health/live` reports process liveness; `/health/ready` and `/health` report database readiness (`503` until migrations are current).
+
+SQLite creates `linkfoundry.db` in the API working directory and applies migrations automatically only in Development. Set `ConnectionStrings__Shortener`, `PublicBaseUrl`, `WebOrigin`, and `ASPNETCORE_ALLOWEDHOSTS` to override defaults. Production also requires `Authentication__Authority`, `Authentication__Audience`, and `Authentication__RequiredScope`; management routes fail closed without them. The SPA production build requires `VITE_AUTH_REQUIRED=true`, `VITE_OIDC_AUTHORITY`, `VITE_OIDC_CLIENT_ID`, `VITE_OIDC_SCOPE`, and `VITE_API_BASE_URL`. Register the exact SPA URL ending in `/auth/callback` and the post-logout origin with your identity provider, and ensure its access token contains the exact scope configured in `Authentication__RequiredScope`. Never put client secrets in the SPA. `web/.env.example` shows the names; deployment values belong in the approved secret/configuration system.
+
+The default launch profile sets `ASPNETCORE_ENVIRONMENT=Development`; this enables anonymous local operator APIs and runs migrations at startup. That mode is for a developer's local loop only and must not be exposed to an untrusted network. Production does not run schema DDL during API startup. Build a reviewed migration bundle and apply it as an explicit deployment step after taking a database backup:
+
+```powershell
+dotnet tool restore
+dotnet ef migrations bundle --project src/Shortener.Infrastructure/Shortener.Infrastructure.csproj --startup-project src/Shortener.Api/Shortener.Api.csproj --context ShortenerDbContext --configuration Release --output artifacts/linkfoundry-efbundle
+& "artifacts/linkfoundry-efbundle.exe" --connection "$env:ConnectionStrings__Shortener"
+```
+
+- List the latest 100 links, inspect all-time click totals and 30-day daily/referrer analytics, and deactivate a link.
+- Rate limit link creation to 20 requests per minute per process/IP; validate destination protocol, embedded credentials, and custom-code shape.
+- Production API access uses OIDC JWT bearer validation plus a required management scope; the SPA uses Authorization Code with PKCE and session-scoped user state.
+- Run service tests and HTTP integration tests using a temporary SQLite database.
+
+## API overview
+
+| Method | Route | Result |
+| --- | --- | --- |
+| `GET` | `/health/live` | Process liveness |
+| `GET` | `/health/ready` or `/health` | Database connectivity and migration readiness |
+| `POST` | `/api/links` | Create link; `201`, `400`, `409`, or `429` |
+| `GET` | `/api/links` | Up to 100 newest link summaries |
+| `GET` | `/api/links/{code}` | Summary, daily clicks, and top referrers |
+| `DELETE` | `/api/links/{code}` | Deactivate; `204` or `404` |
+| `GET` | `/{code}` | Record a click and issue a `302`, or `404` |
+
+Create request:
+
+```json
+{
+  "destinationUrl": "https://example.com/engineering",
+  "customCode": "engineering",
+  "expiresAt": null
+}
+```
+
+Full design, scenarios, risks, AI execution traceability, and the eight-point requirements assessment are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/SCENARIOS.md](docs/SCENARIOS.md), [docs/AI_ENGINEERING.md](docs/AI_ENGINEERING.md), and [docs/FINAL_ENGINEERING_SUMMARY.md](docs/FINAL_ENGINEERING_SUMMARY.md).
+
+## Quality checks
+
+```powershell
+dotnet test LinkFoundry.sln
+cd web
+npm run build
+npm run lint
+npm audit
+```
+
+The workflow in `.github/workflows/quality.yml` repeats locked .NET restore/tests, migration bundle generation, frontend `npm ci`, lint/build, and full npm audit on pushes and pull requests. Production use still requires a real OIDC registration, durable managed database and tested backups, trusted proxy/IP configuration, distributed rate limiting, abuse and bot controls, retention/privacy decisions, telemetry/alerts, load/failure tests, and security/privacy/operations sign-off. SQLite and synchronous click writes are for the reviewable prototype, not horizontally scaled service deployment. “Production-grade” here means production-oriented controls and an auditable release path; it is not a production deployment certification.

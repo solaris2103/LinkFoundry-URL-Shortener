@@ -1,0 +1,48 @@
+name: Quality
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Restore .NET dependencies
+        run: dotnet restore LinkFoundry.sln --locked-mode
+      - name: Test .NET solution
+        run: dotnet test LinkFoundry.sln --no-restore --configuration Release
+      - name: Restore EF tooling
+        run: dotnet tool restore
+      - name: Build reviewed migration bundle
+        run: |
+          mkdir -p artifacts
+          dotnet ef migrations bundle --project src/Shortener.Infrastructure/Shortener.Infrastructure.csproj --startup-project src/Shortener.Api/Shortener.Api.csproj --context ShortenerDbContext --configuration Release --output artifacts/linkfoundry-efbundle
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linkfoundry-efbundle
+          path: artifacts/linkfoundry-efbundle
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: web
+      - name: Audit frontend dependencies
+        run: npm audit --audit-level=moderate
+        working-directory: web
+      - name: Lint frontend
+        run: npm run lint
+        working-directory: web
+      - name: Build frontend
+        run: npm run build
+        working-directory: web
