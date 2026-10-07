@@ -40,23 +40,15 @@ LinkFoundry is a production-oriented URL-shortener prototype demonstrating disci
 - OIDC / PKCE SPA authentication flow
 - CI workflow for restore, tests, lint, build, and dependency audit
 
-## Deployment status
+## Local development setup
 
-This repository is prepared for a simple Render deployment, and the deployment configuration is included in [render.yaml](render.yaml). The public hostname is assigned by Render after the first successful deployment, so this workspace does not claim a live production URL without a cloud account and deployment credentials attached.
+This repository is intentionally configured for local development and review rather than a publicly hosted production URL. The deployment files remain in place for future cloud hosting, but the default run mode is local-only:
 
-Expected service names after deployment:
+- Frontend: `http://localhost:5173`
+- API: `http://localhost:5080`
+- Swagger: `http://localhost:5080/swagger`
 
-- Frontend: `https://linkfoundry-web.onrender.com`
-- API: `https://linkfoundry-api.onrender.com`
-
-These values are the standard Render hostnames for the configured services and should be updated to the actual generated URLs once the app is connected to the hosting account. The repo is ready for a hosted demo, but the actual public URL must be created from the Render console or a valid cloud provider configuration.
-
-### Render setup
-
-1. Connect the GitHub repository to Render.
-2. Render reads [render.yaml](render.yaml) and creates the API web service, SQLite database, and the frontend static site.
-3. Set the OIDC values in the Render dashboard for `Authentication__Authority`, `Authentication__Audience`, and `Authentication__RequiredScope` if you enable protected management routes.
-4. After deployment, verify the frontend loads, the API health endpoint returns `200`, and the redirect flow works from the generated public URL.
+The app is written to run cleanly from a local developer machine, with environment values and OIDC configuration kept explicit rather than assumed to exist in a published host.
 
 ## Site preview
 
