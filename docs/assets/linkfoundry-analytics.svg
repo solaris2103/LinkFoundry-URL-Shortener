@@ -1,0 +1,36 @@
+<svg width="1400" height="920" viewBox="0 0 1400 920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="920" fill="#0B1020"/>
+  <rect x="0" y="0" width="120" height="920" fill="#121A2C"/>
+  <rect x="120" y="0" width="1280" height="920" fill="#0F172A"/>
+  <rect x="180" y="40" width="1040" height="72" rx="18" fill="#111C32"/>
+  <circle cx="220" cy="76" r="12" fill="#7C8CFF"/>
+  <text x="244" y="85" fill="#E6ECFF" font-family="Segoe UI, Arial" font-size="24" font-weight="700">LinkFoundry</text>
+  <rect x="180" y="160" width="1040" height="620" rx="24" fill="#111C32"/>
+  <rect x="220" y="210" width="960" height="48" rx="14" fill="#17243F"/>
+  <text x="250" y="242" fill="#E6ECFF" font-family="Segoe UI, Arial" font-size="20" font-weight="600">Analytics overview</text>
+  <text x="960" y="242" fill="#7C8CFF" font-family="Segoe UI, Arial" font-size="15">30-day window</text>
+
+  <rect x="220" y="290" width="275" height="160" rx="18" fill="#17243F"/>
+  <rect x="520" y="290" width="275" height="160" rx="18" fill="#17243F"/>
+  <rect x="820" y="290" width="360" height="160" rx="18" fill="#17243F"/>
+
+  <text x="248" y="330" fill="#9FB0D9" font-family="Segoe UI, Arial" font-size="16">TOTAL CLICKS</text>
+  <text x="248" y="390" fill="#E6ECFF" font-family="Segoe UI, Arial" font-size="46" font-weight="700">2,481</text>
+  <text x="248" y="420" fill="#7C8CFF" font-family="Segoe UI, Arial" font-size="15">all-time</text>
+
+  <text x="548" y="330" fill="#9FB0D9" font-family="Segoe UI, Arial" font-size="16">DAILY AVG.</text>
+  <text x="548" y="390" fill="#E6ECFF" font-family="Segoe UI, Arial" font-size="46" font-weight="700">84</text>
+  <text x="548" y="420" fill="#7C8CFF" font-family="Segoe UI, Arial" font-size="15">per day</text>
+
+  <text x="848" y="330" fill="#9FB0D9" font-family="Segoe UI, Arial" font-size="16">TOP REFERRERS</text>
+  <text x="848" y="372" fill="#E6ECFF" font-family="Segoe UI, Arial" font-size="22">newsletter.example</text>
+  <text x="848" y="408" fill="#E6ECFF" font-family="Segoe UI, Arial" font-size="22">linkedin.com</text>
+  <text x="848" y="444" fill="#E6ECFF" font-family="Segoe UI, Arial" font-size="22">docs.example.io</text>
+
+  <rect x="220" y="490" width="960" height="240" rx="20" fill="#0F172A"/>
+  <path d="M265 660C310 640 360 610 420 560C470 520 520 600 585 570C645 541 690 490 760 500C810 507 857 490 915 422C965 362 1015 351 1110 320" stroke="#7C8CFF" stroke-width="6" stroke-linecap="round"/>
+  <path d="M265 660C310 640 360 610 420 560C470 520 520 600 585 570C645 541 690 490 760 500C810 507 857 490 915 422C965 362 1015 351 1110 320" stroke="#A5B4FF" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <text x="250" y="660" fill="#9FB0D9" font-family="Segoe UI, Arial" font-size="15">7D</text>
+  <text x="680" y="660" fill="#9FB0D9" font-family="Segoe UI, Arial" font-size="15">14D</text>
+  <text x="1035" y="660" fill="#9FB0D9" font-family="Segoe UI, Arial" font-size="15">30D</text>
+</svg>

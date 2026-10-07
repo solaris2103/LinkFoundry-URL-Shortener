@@ -23,6 +23,33 @@ LinkFoundry is a production-oriented URL-shortener prototype demonstrating disci
 | AI decision log | [docs/AI_DECISION_LOG.md](docs/AI_DECISION_LOG.md) |
 | Final engineering summary | [docs/FINAL_ENGINEERING_SUMMARY.md](docs/FINAL_ENGINEERING_SUMMARY.md) |
 
+## Features
+
+- Create short links with optional custom codes and expiry dates.
+- Monitor redirect totals, daily click patterns, and top referrers.
+- Deactivate links safely when they are no longer valid.
+- Enforce HTTP(S) destination validation and route protections.
+- Secure the management API with OIDC JWT validation and required scope checks.
+- Provide a reviewable engineering record for AI-assisted development decisions.
+
+## Tech stack
+
+- React + TypeScript frontend
+- ASP.NET Core minimal API
+- EF Core + SQLite for local persistence and migration-based schema control
+- OIDC / PKCE SPA authentication flow
+- CI workflow for restore, tests, lint, build, and dependency audit
+
+## Site preview
+
+### Dashboard overview
+
+![LinkFoundry dashboard](docs/assets/linkfoundry-dashboard.svg)
+
+### Analytics view
+
+![LinkFoundry analytics](docs/assets/linkfoundry-analytics.svg)
+
 ## Run locally
 
 Prerequisites: .NET 8 SDK and Node.js 20.19+ (or 22.12+) with npm. The supported Node version is pinned in `.nvmrc`. CI runs ESLint 10 and Vite 7 using Node 22.14.
