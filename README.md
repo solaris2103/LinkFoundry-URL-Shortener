@@ -1,6 +1,27 @@
 # LinkFoundry Engineering Assessment
 
-LinkFoundry is a reviewable URL-shortener prototype built with a React/TypeScript client and a .NET 8 API. It demonstrates an engineer-led workflow from requirements through decomposition, implementation, testing, and documented risk decisions. AI is used as an implementation and review assistant; it does not select tasks, approve changes, or deploy software.
+LinkFoundry is a production-oriented URL-shortener prototype demonstrating disciplined AI-assisted engineering rather than a throwaway demo. It shows how an engineer can define the task, constrain the AI, review generated output, reject weak assumptions, validate against real tests, document the residual risks, and keep the prototype honest about what is and is not production-ready.
+
+## What this project demonstrates
+
+- Requirement normalization and scoped task decomposition.
+- AI-assisted implementation with human review and explicit acceptance or rejection decisions.
+- Brownfield-style enhancement reasoning, ambiguity handling, and risk trade-offs.
+- .NET and React validation with migration and CI-based quality gates.
+- Security-conscious defaults, explicit limitations, and a documented production evolution path.
+
+## Repository evidence map
+
+| Area | Evidence |
+| --- | --- |
+| AI-assisted engineering model | [docs/AI_ENGINEERING.md](docs/AI_ENGINEERING.md) |
+| Scenario-driven requirement handling | [docs/SCENARIOS.md](docs/SCENARIOS.md) |
+| Requirement traceability | [docs/REQUIREMENTS_TRACEABILITY.md](docs/REQUIREMENTS_TRACEABILITY.md) |
+| Architecture and product context | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
+| Threat model and control coverage | [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) |
+| Failure-mode validation | [docs/FAILURE_TESTS.md](docs/FAILURE_TESTS.md) |
+| AI decision log | [docs/AI_DECISION_LOG.md](docs/AI_DECISION_LOG.md) |
+| Final engineering summary | [docs/FINAL_ENGINEERING_SUMMARY.md](docs/FINAL_ENGINEERING_SUMMARY.md) |
 
 ## Run locally
 
@@ -66,8 +87,6 @@ Create request:
 }
 ```
 
-Full design, scenarios, risks, AI execution traceability, and the eight-point requirements assessment are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/SCENARIOS.md](docs/SCENARIOS.md), [docs/AI_ENGINEERING.md](docs/AI_ENGINEERING.md), and [docs/FINAL_ENGINEERING_SUMMARY.md](docs/FINAL_ENGINEERING_SUMMARY.md).
-
 ## Quality checks
 
 ```powershell
@@ -79,3 +98,7 @@ npm audit
 ```
 
 The workflow in `.github/workflows/quality.yml` repeats locked .NET restore/tests, migration bundle generation, frontend `npm ci`, lint/build, and full npm audit on pushes and pull requests. Production use still requires a real OIDC registration, durable managed database and tested backups, trusted proxy/IP configuration, distributed rate limiting, abuse and bot controls, retention/privacy decisions, telemetry/alerts, load/failure tests, and security/privacy/operations sign-off. SQLite and synchronous click writes are for the reviewable prototype, not horizontally scaled service deployment. “Production-grade” here means production-oriented controls and an auditable release path; it is not a production deployment certification.
+
+## Engineering evidence and review
+
+This project is intentionally explicit about what is implemented, what is intentionally not included, and what would need a production review gate before exposing the service publicly. The repository includes a complete evidence trail for requirement understanding, ambiguity handling, AI-assisted decision-making, validation, and residual risk.
