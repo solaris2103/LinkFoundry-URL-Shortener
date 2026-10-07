@@ -1,0 +1,58 @@
+services:
+  - type: web
+    name: linkfoundry-api
+    runtime: docker
+    rootDir: .
+    dockerfilePath: ./src/Shortener.Api/Dockerfile
+    plan: free
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:10000
+      - key: ConnectionStrings__Shortener
+        fromDatabase:
+          name: linkfoundry-db
+          property: connectionString
+      - key: PublicBaseUrl
+        value: https://linkfoundry-api.onrender.com
+      - key: WebOrigin
+        value: https://linkfoundry-web.onrender.com
+      - key: ASPNETCORE_ALLOWEDHOSTS
+        value: "*"
+      - key: Authentication__Authority
+        sync: false
+      - key: Authentication__Audience
+        sync: false
+      - key: Authentication__RequiredScope
+        value: shortener.links.manage
+
+  - type: web
+    name: linkfoundry-web
+    runtime: static
+    rootDir: web
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    pullRequestPreviewsEnabled: false
+    plan: free
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://linkfoundry-api.onrender.com
+      - key: VITE_AUTH_REQUIRED
+        value: "false"
+      - key: VITE_OIDC_AUTHORITY
+        sync: false
+      - key: VITE_OIDC_CLIENT_ID
+        sync: false
+      - key: VITE_OIDC_SCOPE
+        value: openid profile api://linkfoundry-api/shortener.links.manage
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+databases:
+  - name: linkfoundry-db
+    databaseName: linkfoundry
+    user: linkfoundry
+    plan: free
